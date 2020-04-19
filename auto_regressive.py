@@ -13,9 +13,9 @@ import time
 #
 # X[t]=a*X[t-1]+b*X[t-2]+w[t]
 
-niter=400
+niter=200
 X_range=range(0,niter)
-X=[1]
+X=[10]
 w=[]
 w.append(np.random.normal(scale=0.5))
 a=0.85
@@ -27,21 +27,22 @@ for i in range(1,niter):
     X.append(a*X[-1]+w[-1])
 
 win_size=10
-MA_range=range(0,niter,win_size)
+MA_range=range(0,niter-win_size)
 MA=[]
 
 for i in MA_range:
     MA.append(np.mean(X[i:i+win_size]))
 
 # Linear interpolate moving average
-MA_int=np.interp(X_range,MA_range,MA)
+#MA_int=np.interp(X_range,MA_range,MA)
 
-plt.figure("AR(1) model")
+fig=plt.figure("AR(1) model",figsize=(9,6))
+fig.set_tight_layout(True)
 ax=plt.subplot(211)
 ax.set_title("AR(1)'s result after %d iterations with a=%.2f" \
         % (niter,a))
-ax.plot(X_range,X,".-",label=r"$X_t=a\cdot X_{t-1}+w_t$")
-ax.plot(MA_range,MA,".-",
+ax.plot(X_range,X,".",label=r"$X_t=a\cdot X_{t-1}+w_t$")
+ax.plot(MA_range,MA,"-",
         label="Moving Average with window size %d" % win_size)
 ax.legend()
 
